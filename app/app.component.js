@@ -1,8 +1,6 @@
-/*
-    1 - Importo un componente, lo cual es una función, desde el core
-    2 - Le paso un objeto METADATA con, de momento, dos propiedades - selector and template -
-    3 - Exporto la clase AppComponent, la cual supongo que es el resultado de ejecutar el methodo Component
-*/
+// 1 - Importo componente
+// 2 - Llamo al componente añadiendo metadata decorator (propiedades)
+// 3 - exporto clase resultante
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -14,34 +12,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var hero_detail_component_1 = require('./hero-detail.component');
-// Defino in array de Heroes, en una constante, del tipo array de heroes. 
-//Estos datos deberian venir de un webservice, pero por ahora mostramos mock heroes
-var HEROES = [
-    { id: 11, name: 'Mr. Nice' },
-    { id: 12, name: 'Narco' },
-    { id: 13, name: 'Bombasto' },
-    { id: 14, name: 'Celeritas' },
-    { id: 15, name: 'Magneta' },
-    { id: 16, name: 'RubberMan' },
-    { id: 17, name: 'Dynama' },
-    { id: 18, name: 'Dr IQ' },
-    { id: 19, name: 'Magma' },
-    { id: 20, name: 'Tornado' }
-];
+var router_1 = require('@angular/router');
+var hero_service_1 = require('./hero.service');
 var AppComponent = (function () {
     function AppComponent() {
         this.title = 'Tour of Heroes';
-        // Creamos una public property para exponer heroes. Necesario para el binding.
-        this.heroes = HEROES;
     }
-    AppComponent.prototype.onSelect = function (hero) { this.selectedHero = hero; };
     AppComponent = __decorate([
         core_1.Component({
+            // Que propiedades son esenciales??? SELECTOR and TEMPLATES
             selector: 'my-app',
-            template: "\n        <h1>{{title}}</h1>\n        <h2>My heroes</h2>\n        <ul class=\"heroes\">\n            <!-- 'hero of heroes' means: Recorreme el array heroes y por cada posicion me creas una variable llamada hero-->\n            <!-- let identifica 'hero' como una template input variable-->\n            <li *ngFor=\"let hero of heroes\" [class.selected]=\"hero === selectedHero\"\n             (click)=\"onSelect(hero)\">\n                <span class=\"badge\">{{hero.id}}</span> {{hero.name}}\n            </li>\n        </ul>\n        <my-hero-detail [hero]=\"selectedHero\"></my-hero-detail>\n        ",
-            styles: ["\n            .selected {\n                background-color: #CFD8DC !important;\n                color: white;\n            }\n            .heroes {\n                margin: 0 0 2em 0;\n                list-style-type: none;\n                padding: 0;\n                width: 15em;\n            }\n            .heroes li {\n                cursor: pointer;\n                position: relative;\n                left: 0;\n                background-color: #EEE;\n                margin: .5em;\n                padding: .3em 0;\n                height: 1.6em;\n                border-radius: 4px;\n            }\n            .heroes li.selected:hover {\n                background-color: #BBD8DC !important;\n                color: white;\n            }\n            .heroes li:hover {\n                color: #607D8B;\n                background-color: #DDD;\n                left: .1em;\n            }\n            .heroes .text {\n                position: relative;\n                top: -3px;\n            }\n            .heroes .badge {\n                display: inline-block;\n                font-size: small;\n                color: white;\n                padding: 0.8em 0.7em 0 0.7em;\n                background-color: #607D8B;\n                line-height: 1em;\n                position: relative;\n                left: -1px;\n                top: -4px;\n                height: 1.8em;\n                margin-right: .8em;\n                border-radius: 4px 0 0 4px;\n            }\n            "],
-            directives: [hero_detail_component_1.HeroDetailComponent] // Con 'directive' property le decimos a Angular = "esto es una nueva HTML tag que puedes usar" 
+            providers: [hero_service_1.HeroService],
+            template: "\n        <h1>{{title}}</h1>\n        <nav>\n            <a [routerLink]=\"['/dashboard']\" routerLinkActive=\"active\">Dashboard</a>\n            <a [routerLink]=\"['/heroes']\" routerLinkActive=\"active\">Heroes</a>\n        </nav>\n        <router-outlet></router-outlet>\n    ",
+            directives: [router_1.ROUTER_DIRECTIVES],
+            styleUrls: ['app/app.component.css']
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

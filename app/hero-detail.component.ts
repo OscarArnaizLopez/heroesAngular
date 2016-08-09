@@ -1,10 +1,13 @@
 // Aqui cumplimos el SRP porque este modulo se responsabiliza unicamente de actualizar los detalles del hero. No otra tarea es asignada
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Hero } from './hero';
+import { ActivatedRoute } from '@angular/router';
+import { HeroService } from './hero.service';
 
 @Component ({
     selector: 'my-hero-detail',
-    template: `
+    templateUrl: 'app/hero-detail.component.html'
+    /*template: `
         <!-- Uso una 'structural directives' para mostrar selectedHero solamente cuando esto existe -->
         <div *ngIf="hero">
             <h2>{{hero.name}} details!</h2>
@@ -14,10 +17,31 @@ import { Hero } from './hero';
                 <input [(ngModel)] = "hero.name" placeholder="name">
             </div>
         </div>
-        `
+        `*/
 })
 
-export class HeroDetailComponent {
-    @Input()
-    hero: Hero// Como le paso el hero. A través del import?? si, probablemente
+export class HeroDetailComponent implements OnInit, OnDestroy {
+    hero: Hero;
+    sub: any;
+    
+    constructor(
+        private heroService: HeroService, 
+        private route: ActivatedRoute){
+            
+        }
+    
+    ngOnInit(){
+        this.sub = this.route.params.subscribe(params => {
+        let id = +params['id'];
+        this.heroService.getHero(id)
+            .then(hero => this.hero = hero);
+        });
+
+    }
+    ngOnDestroy(){
+        this.sub.unsubscribe();
+    }
+    goBack() {
+        window.history.back();
+    }
 }
