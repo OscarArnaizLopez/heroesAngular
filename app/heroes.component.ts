@@ -26,6 +26,7 @@ export class HeroesComponent implements OnInit {
     // Creamos una public property para exponer heroes. Necesario para el binding.
     heroes: Hero[];
     selectedHero: Hero;
+    error: any;
     //Constructor son para simples inicializations, no para heavy lifting. - Como llamar a un webservice
     constructor(
         private router: Router,
@@ -41,5 +42,25 @@ export class HeroesComponent implements OnInit {
     }
     gotoDetails(){
         this.router.navigate(['/detail', this.selectedHero.id]);
+    }
+    addHero() {
+        this.addingHero = true;
+        this.selectedHero = null;
+    }
+    close(savedHero: Hero) {
+        this.addingHero = false;
+        if (savedHero) {
+            this.getHeroes();
+        }
+    }
+    deleteHero(hero: Hero, event: any) {
+        event.stopPropagation();
+        this.heroService
+            .delete(hero)
+            .then(res =>{
+                this.heroes = this.heroes.filter(h => h !== hero);
+                if(this.selectedHero === hero) { this.selectedHero = null; }
+            })
+            .catch(error => this.error = error);
     }
 }

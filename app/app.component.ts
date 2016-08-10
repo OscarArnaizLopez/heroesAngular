@@ -1,15 +1,9 @@
-
-
-// 1 - Importo componente
-// 2 - Llamo al componente añadiendo metadata decorator (propiedades)
-// 3 - exporto clase resultante
-
 import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { HeroService } from './hero.service';
+import './rxjs-extensions';
 
 @Component({
-    // Que propiedades son esenciales??? SELECTOR and TEMPLATES
     selector: 'my-app',
     providers:[HeroService], // Esto crea una instancia de HeroService que está disponible en todo la aplicacion
     template: `
